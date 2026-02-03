@@ -268,7 +268,6 @@ Potential improvements to consider:
 
 - [ ] Add yield rewards distribution
 - [ ] Implement multiple strategies per vault
-- [ ] Add time-locked withdrawals
 - [ ] Create governance for strategy parameters
 - [ ] Add multi-signature for critical operations
 - [ ] Implement strategy performance tracking
