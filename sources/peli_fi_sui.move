@@ -72,4 +72,10 @@ module peli_fi_sui::peli_fi {
         let coin = coin::from_balance(split_balance, ctx);
         transfer::public_transfer(coin, vault.owner);
     }
+
+    // Tambahkan ini di bagian paling bawah module peli_fi_sui::peli_fi
+    #[test_only]
+    public fun init_for_testing(ctx: &mut TxContext) {
+        init(ctx)
+    }
 }

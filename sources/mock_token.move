@@ -4,6 +4,7 @@ module peli_fi_sui::mock_token {
     /// Nama struct harus sama dengan nama module (Uppercase) 
     /// Ini disebut One-Time Witness (OTW)
     public struct MOCK_TOKEN has drop {}
+    
 
     /// Fungsi init otomatis jalan sekali pas kontrak di-deploy
     fun init(witness: MOCK_TOKEN, ctx: &mut TxContext) {
@@ -38,4 +39,10 @@ module peli_fi_sui::mock_token {
         let coin = coin::mint(treasury_cap, amount, ctx);
         transfer::public_transfer(coin, recipient);
     }
+
+    #[test_only]
+public fun init_for_testing(ctx: &mut TxContext) {
+    init(MOCK_TOKEN {}, ctx)
 }
+}
+
