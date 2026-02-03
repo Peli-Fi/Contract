@@ -273,13 +273,6 @@ Potential improvements to consider:
 - [ ] Add multi-signature for critical operations
 - [ ] Implement strategy performance tracking
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Write tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
 
 ## License
 
