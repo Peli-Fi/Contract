@@ -284,13 +284,6 @@ Specify your license here (e.g., MIT, Apache 2.0)
 - [Sui Discord](https://discord.gg/sui)
 - [Sui Explorer (Testnet)](https://suiscan.xyz/testnet)
 
-## Support
-
-For questions or issues:
-- Open an issue on GitHub
-- Contact the development team
-- Join our community Discord
-
 ---
 
 **Built with ❤️ for Sui ecosystem**
