@@ -12,8 +12,8 @@ module peli_fi_sui::mock_token {
         let (treasury, metadata) = coin::create_currency(
             witness, 
             6, 
-            b"MOCK", 
-            b"Mock Token", 
+            b"USDC", 
+            b"Mock USDC", 
             b"Peli-Fi Test Token", 
             option::none(), 
             ctx
