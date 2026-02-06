@@ -5,21 +5,15 @@ module peli_fi_sui::mock_token {
 
     public struct MOCK_TOKEN has drop {}
 
-    // Objek Faucet yang dibagikan secara publik (Shared Object)
     public struct Faucet has key {
         id: UID,
         treasury_cap: TreasuryCap<MOCK_TOKEN>,
-        // Mencatat: Alamat User -> Timestamp Terakhir Claim (dalam ms)
         last_mint: Table<address, u64>
     }
 
-    // Errors
     const ECooldownNotFinished: u64 = 0;
-
-    // 1 Jam = 3.600.000 Milliseconds
-    const COOLDOWN_MS: u64 = 3600000;
-    // Jumlah koin yang didapat sekali claim (1000 USDC dengan 6 desimal)
-    const MINT_AMOUNT: u64 = 1000000000; 
+    const COOLDOWN_MS: u64 = 3600000; // 1 Jam
+    const MINT_AMOUNT: u64 = 1000000000; // 1000 USDC (6 desimal)
 
     fun init(witness: MOCK_TOKEN, ctx: &mut TxContext) {
         let (treasury_cap, metadata) = coin::create_currency(
@@ -34,7 +28,6 @@ module peli_fi_sui::mock_token {
 
         transfer::public_freeze_object(metadata);
 
-        // Bungkus TreasuryCap ke dalam Faucet dan jadikan Shared Object
         let faucet = Faucet {
             id: object::new(ctx),
             treasury_cap,
@@ -43,7 +36,6 @@ module peli_fi_sui::mock_token {
         transfer::share_object(faucet);
     }
 
-    // Fungsi bagi publik untuk meminta koin (Faucet)
     public entry fun request_faucet(
         faucet: &mut Faucet,
         clock: &Clock,
@@ -54,19 +46,24 @@ module peli_fi_sui::mock_token {
 
         if (table::contains(&faucet.last_mint, sender)) {
             let last_claim = *table::borrow(&faucet.last_mint, sender);
-            // Validasi: Apakah sudah lewat 1 jam sejak claim terakhir?
             assert!(current_time >= last_claim + COOLDOWN_MS, ECooldownNotFinished);
             
-            // Update waktu claim terbaru
             let last_claim_ref = table::borrow_mut(&mut faucet.last_mint, sender);
             *last_claim_ref = current_time;
         } else {
-            // Jika user baru pertama kali claim
             table::add(&mut faucet.last_mint, sender, current_time);
         };
 
-        // Mint koin ke dompet user
         let coins = coin::mint(&mut faucet.treasury_cap, MINT_AMOUNT, ctx);
         transfer::public_transfer(coins, sender);
+    }
+
+    // --- FITUR BARU: GETTER UNTUK FRONTEND ---
+    public fun get_last_claim(faucet: &Faucet, user: address): u64 {
+        if (table::contains(&faucet.last_mint, user)) {
+            *table::borrow(&faucet.last_mint, user)
+        } else {
+            0
+        }
     }
 }
